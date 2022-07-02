@@ -37,6 +37,7 @@ sudo chsh -s $(which zsh)
 packages=(
 	"konsole" "rufi" "librewolf"
 	"highlight" "exa" "neofetch"
+	"arandr" "fontawesome-fonts" "fontawesome-fonts-web"
 )
 
 
