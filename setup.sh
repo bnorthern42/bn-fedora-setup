@@ -16,12 +16,16 @@ fi
 
 # ------------------------------------------------------------------------------
 # Function: optimize_dnf
-# Description: Speeds up DNF by enabling parallel downloads and fastest mirrors.
+# Description: Speeds up DNF by enabling parallel downloads, fastest mirrors, 
+#              and caching optimizations.
 # ------------------------------------------------------------------------------
 optimize_dnf() {
     echo "Optimizing DNF package manager..."
     echo "max_parallel_downloads=10" >> /etc/dnf/dnf.conf
     echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+    echo "defaultyes=True" >> /etc/dnf/dnf.conf
+    echo "keepcache=True" >> /etc/dnf/dnf.conf
+    echo "metadata_expire=1h" >> /etc/dnf/dnf.conf
 }
 
 # ------------------------------------------------------------------------------
