@@ -1,0 +1,44 @@
+## Edit help
+alias al='pushd   $XDG_CONFIG_HOME/.zsh_custom/aliases/'
+alias af='pushd   $XDG_CONFIG_HOME/.zsh_custom/'
+alias az='nvim   $HOME/.config/zsh/.zshrc'
+## Gaming:
+#alias wurm='GDK_BACKEND=x11 MESA_GL_VERSION_OVERRIDE=4.3 WurmLauncher'
+alias wurm='pushd $HOME/.config/wurm/players/polarbear'
+## See open ##listening## ports
+## start consul for service discovery
+alias sconsul='consul agent -dev -node BNMainNode'
+
+## helpfuls
+alias nf='neofetch'
+alias wet='ansiweather -l Cookeville,TN,USA -u imperial -F -s true -a false -w true -h true -p true'
+# prettier ip addr and prettier ip link
+alias ipa='ip -br -c addr'
+alias ipl='ip -br -c link'
+## Main Server open certain web services
+alias pdf='$HOME/Apps/termpdf.py/termpdf.py'
+#portainer:
+alias mport='brave-browser http://localhost:9000'
+
+#### WORK Stuff and verc stuf for private aliases and functions 
+#like SSHing etc... #put your stuff in here that's private
+source $XDG_CONFIG_HOME/.zsh_custom/.privrc
+
+
+##Cleanup
+#source all the files in alias directory
+ for f in $XDG_CONFIG_HOME/.zsh_custom/aliases/*; do source $f; done
+
+#source all the files in alias directory
+ for f in $XDG_CONFIG_HOME/.zsh_custom/functions/*; do source $f; done
+
+#generate 25 character passwords
+alias pwgen='pwgen -s 25 5 -1 -y'
+
+## add color to grep
+alias grep='grep --color=auto'
+
+
+### XDG NINJA HELP
+alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
+alias gdb=gdb -n -x $XDG_CONFIG_HOME/gdb/init

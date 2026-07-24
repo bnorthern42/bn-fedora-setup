@@ -1,0 +1,36 @@
+#### Stuff that doesn't belong in functions dir files
+
+#ListAllCommands | grep searchstr
+function ListAllCommands
+{
+    COMMANDS=`echo -n $PATH | xargs -d : -I {} find {} -maxdepth 1 \
+        -executable -type f -printf '%P\n'`
+    ALIASES=`acs`
+    echo "ALIASES*****************************************************$ALIASES"
+        echo '\n******************************************************\n'
+        echo "COMMANDS\n******************************************************$COMMANDS" | sort | uniq | pr -3 -t
+}
+
+
+#start wurm related stuff
+function wrm(){
+
+#open affinity pizza worksheet
+google-chrome-stable 'https://docs.google.com/spreadsheets/d/1t2XwEsE6nWnYuZqWRQLdj-_gNhC5S8r3B5lSouix2W8/edit#gid=1268216466'
+#open master wurm data workbook data
+google-chrome-stable 'https://docs.google.com/spreadsheets/d/1XPPA0g187rQ-lFb8RJY0HKFHd84F7J3mVPL3Jq-72fg/edit#gid=0'
+#start grinder
+google-chrome-stable 'http://localhost:6400'
+
+
+if [ -z ${1} ]; then
+	echo "";
+else
+	wurm-launcher.sh &
+fi
+}
+
+
+function dmalloc { eval `command dmalloc -b $*`; }
+
+

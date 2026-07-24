@@ -1,0 +1,1 @@
+a bash function in my zsh_custom to compile and one to run C# programs via CLI

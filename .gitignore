@@ -1,0 +1,33 @@
+# Emacs
+*.elc
+*.eln
+eln-cache/
+.emacs.desktop
+.emacs.desktop.lock
+.emacs.d/auto-save-list/
+.emacs.d/elpa/
+.emacs.d/straight/
+.emacs.d/server/
+.emacs.d/tramp
+auto-save-list/
+semanticdb/
+session/
+url/
+
+# General Binaries and objects
+*.o
+*.so
+*.a
+*.out
+*.exe
+*.dll
+*.class
+*.pyc
+__pycache__/
+
+# OS Generated
+.DS_Store
+Thumbs.db
+
+# Other caches
+.cache/

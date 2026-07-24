@@ -1,0 +1,82 @@
+// This configuration is merged with the default vicinae configuration file, which you can obtain by running the `vicinae config default` command.
+// Every item defined in this file takes precedence over the values defined in the default config or any other imported file.
+//
+// You can make manual edits to this file, however you should keep in mind that this file may be written to by vicinae when a configuration change is made through the GUI.
+// When that happens, any custom comments or formatting will be lost.
+//
+// If you want to maintain a configuration file with your own comments and formatting, you should create a separate file and add it to the 'imports' array.
+//
+// Learn more about configuration at https://docs.vicinae.com/config
+
+{
+   "$schema": "https://vicinae.com/schemas/config.json",
+   "theme": {
+      "dark": {
+         "name": "noctalia"
+      }
+   },
+   "providers": {
+      "@knoopx/store.vicinae.niri": {
+         "entrypoints": {
+            "power-off-monitors": {
+               "enabled": false
+            }
+         }
+      },
+      "applications": {
+         "preferences": {
+            "defaultAction": "launch",
+            "paths": [
+               "/home/bradn44/.local/share/applications",
+               "/home/bradn44/.local/share/flatpak/exports/share/applications",
+               "/var/lib/flatpak/exports/share/applications",
+               "/usr/local/share/applications",
+               "/usr/share/applications",
+               "/var/lib/snapd/desktop/applications"
+            ]
+         },
+         "entrypoints": {
+            "emacs": {
+               "alias": "gtk-launch emacs",
+               "enabled": true
+            }
+         }
+      },
+      "core": {
+         "entrypoints": {
+            "sponsor": {
+               "enabled": false
+            }
+         }
+      },
+      "power": {
+         "entrypoints": {
+            "hibernate": {
+               "enabled": false
+            },
+            "lock": {
+               "enabled": false
+            },
+            "sleep": {
+               "enabled": false
+            },
+            "soft-reboot": {
+               "enabled": false
+            },
+            "suspend": {
+               "enabled": false
+            }
+         }
+      },
+      "raycast-compat": {
+         "entrypoints": {
+            "store": {
+               "enabled": false
+            }
+         }
+      },
+      "scripts": {
+         "enabled": false
+      }
+   }
+}

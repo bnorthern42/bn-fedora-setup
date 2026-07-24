@@ -1,0 +1,371 @@
+prefer-no-csd
+
+input {
+    keyboard {
+        //repeat-delay 200
+        //repeat-rate 35
+        xkb {
+        }
+        numlock
+    }
+
+    touchpad {
+        // off
+        tap
+        // dwt
+        // dwtp
+        // drag false
+        // drag-lock
+        // natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // scroll-method "two-finger" 
+        // disabled-on-external-mouse
+    }
+
+    mouse {
+    }
+
+    trackpoint {
+    }
+    focus-follows-mouse max-scroll-amount="0%"
+}
+
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://yalter.github.io/niri/Configuration:-Outputs
+// Remember to uncomment the node by removing "/-"!
+// Left monitor - 27" Acer 1440p horizontal
+output "DP-2" {
+    mode "2560x1440@74.924"
+    scale 1
+    transform "normal"
+    position x=0 y=0
+}
+
+// Center monitor - 34" Acer ultrawide
+output "DP-1" {
+    mode "3440x1440@100.000"
+    scale 1
+    transform "normal"
+    position x=2560 y=0
+
+    focus-at-startup
+}
+
+// Right monitor - 27" ASUS 1080p vertical
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    scale 1
+
+    // If rotated wrong, switch this to "270".
+    transform "270"
+
+    // Rotated 1920x1080 becomes logical 1080x1920.
+    position x=6000 y=0
+}
+
+
+
+// Settings that influence how windows are positioned and sized.
+// Find more information on the wiki:
+// https://yalter.github.io/niri/Configuration:-Layout
+layout {
+    gaps 7
+
+    center-focused-column "never"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.5; }
+    focus-ring {
+        width 1.5
+
+        active-color "#7fc8ff"
+
+        inactive-color "#505050"
+    }
+
+    border {
+        off
+
+        width 1.5
+        active-color "#ffc87f"
+        inactive-color "#505050"
+        urgent-color "#9b0000"
+
+    }
+
+    shadow {
+        // on
+
+        softness 30
+        spread 5
+        offset x=0 y=5
+        color "#0007"
+    }
+
+    struts {
+    }
+    tab-indicator {
+        width 30
+        gap -100
+        gaps-between-tabs 10
+        length total-proportion=1.0
+        position "right"
+        place-within-column
+        active-color "#275EF5"
+
+    }
+}
+
+// This line starts waybar, a commonly used bar for Wayland compositors.
+//spawn-at-startup "sfwbar"
+
+
+// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
+// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+
+hotkey-overlay {
+    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
+    // skip-at-startup
+}
+
+// Uncomment this line to ask the clients to omit their client-side decorations if possible.
+// If the client will specifically ask for CSD, the request will be honored.
+// Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
+// This option will also fix border/focus ring drawing behind some semitransparent windows.
+// After enabling or disabling this, you need to restart the apps for this to take effect.
+// prefer-no-csd
+
+// You can change the path where screenshots are saved.
+// A ~ at the front will be expanded to the home directory.
+// The path is formatted with strftime(3) to give you the screenshot date and time.
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// You can also set this to null to disable saving screenshots to disk.
+// screenshot-path null
+
+// Animation settings.
+// The wiki explains how to configure individual animations:
+// https://yalter.github.io/niri/Configuration:-Animations
+animations {
+    // Uncomment to turn off all animations.
+    // off
+
+    // Slow down all animations by this factor. Values below 1 speed them up instead.
+    // slowdown 3.0
+}
+
+// Window rules let you adjust behavior for individual windows.
+// Find more information on the wiki:
+// https://yalter.github.io/niri/Configuration:-Window-Rules
+
+// Work around WezTerm's initial configure bug
+// by setting an empty default-column-width.
+window-rule {
+    // This regular expression is intentionally made as specific as possible,
+    // since this is the default config, and we want no false positives.
+    // You can get away with just app-id="wezterm" if you want.
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Open the Firefox picture-in-picture player as floating by default.
+window-rule {
+    // This app-id regular expression will work for both:
+    // - host Firefox (app-id is "firefox")
+    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+window-rule {
+    match app-id="nm-connection-editor"
+    open-floating true
+}
+window-rule {
+    match app-id="niri-settings"
+    open-floating true
+}
+
+window-rule {
+    match app-id="GLWindow"
+    open-floating true
+}
+
+window-rule {
+    match app-id="aphototoollibre"
+    open-floating true
+}
+
+window-rule {
+    match app-id="virt-manager"
+    open-floating true
+}
+
+window-rule {
+    match app-id="input-remapper-gtk"
+    open-floating true
+}
+
+window-rule {
+    match app-id="org.gnome.Nautilus"
+    open-floating true
+}
+
+window-rule {
+    match app-id="kcm_kaccounts"
+    open-floating true
+}
+
+window-rule {
+    match app-id="org.kde.dolphin"
+    open-floating true
+}
+
+window-rule {
+    match app-id="qjournalctl"
+    open-floating true
+}
+
+
+window-rule {
+    match app-id="com.wurmonline.client.launcherfx.WurmMain"
+    open-floating true
+    geometry-corner-radius 10
+    clip-to-geometry true
+    draw-border-with-background false
+}
+
+window-rule {
+    match app-id="Wurmlauncher"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#".*Wurm Online.*"#
+
+    open-floating false
+    open-fullscreen false
+    open-maximized-to-edges true
+}
+
+// workspace "" {
+/-workspace "c" {
+}
+/-workspace "b" {
+}
+/-workspace "a" {
+}
+
+window-rule {
+    match title="Firefox"
+    open-on-workspace "c"
+    open-maximized true
+}
+
+// Example: block out two password managers from screen capture.
+// (This example rule is commented out with a "/-" in front.)
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+
+    block-out-from "screen-capture"
+
+    // Use this instead if you want them visible on third-party screenshot tools.
+    // block-out-from "screencast"
+}
+
+// Example: enable rounded corners for all windows.
+// (This example rule is commented out with a "/-" in front.)
+/-window-rule {
+    geometry-corner-radius 0
+    clip-to-geometry true
+}
+window-rule {
+    match app-id=r#"nemo"#
+    open-floating true
+}
+/-window-rule {
+    match title="Joplin"
+    open-floating true
+}
+window-rule {
+    match app-id=r#"Wurm Online"#
+    open-floating true
+}
+window-rule {
+    match app-id="librewolf-dev-layout"
+    open-on-workspace "dev"
+    default-column-width { proportion 0.66667; }
+}
+workspace "main"{
+    open-on-output "DP-1"
+}
+workspace "dev" {
+    open-on-output "DP-1"
+}
+workspace "res"{
+    open-on-output "DP-1"
+}
+workspace "gam"{
+    open-on-output "DP-1"
+}
+workspace "misc"{
+    open-on-output "DP-1"
+}
+
+
+//Dev window rules
+window-rule {
+    match app-id="emacs"
+    open-on-workspace "dev"
+    default-column-width { proportion 0.33333; }
+}
+
+window-rule {
+    match app-id="brave"
+    open-on-workspace "dev"
+    default-column-width { proportion 0.66667; }
+}
+window-rule {
+    match app-id="joplin"
+    open-on-workspace "dev"
+    default-column-width { proportion 0.33333; }
+}
+//misc window rules
+window-rule {
+   match app-id="org.keepassxc.KeePassXC"
+   open-on-workspace "misc"
+}
+window-rule {
+   match app-id="org.cachyos.hello"
+   open-on-workspace "misc"
+}
+window-rule {
+   match app-id="keymapp"
+   open-on-workspace "misc"
+}
+
+
+
+include "./noctalia.kdl"
+
+
+include "basicsettings.kdl" // Added by niri-settings
+
+include "keybinds.kdl" // Added by niri-settings
+
+//**************** Startup Spawns ****************
+ 
+
+spawn-at-startup "vicinae" "server"
+spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "keymapp"
+

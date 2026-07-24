@@ -1,103 +1,110 @@
 #!/bin/bash
 
-if [[ $UID != 0 ]]; then
+# ==============================================================================
+# Script: setup.sh
+# Description: Main orchestrator for setting up a Fedora Server as a daily driver.
+#              Configures the system, installs base packages, sets up ZSH, 
+#              moves user config files, and calls the secondary setup scripts.
+# Execution: Must be run with sudo.
+# ==============================================================================
+
+if [[ $EUID -ne 0 ]]; then
     echo "Please run this script with sudo:"
     echo "sudo $0 $*"
     exit 1
 fi
 
-## First optimize DNF
-echo "max_parallel_downloads=10" >> /etc/dnf/dnf.conf
-echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+# ------------------------------------------------------------------------------
+# Function: optimize_dnf
+# Description: Speeds up DNF by enabling parallel downloads and fastest mirrors.
+# ------------------------------------------------------------------------------
+optimize_dnf() {
+    echo "Optimizing DNF package manager..."
+    echo "max_parallel_downloads=10" >> /etc/dnf/dnf.conf
+    echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+}
 
+# ------------------------------------------------------------------------------
+# Function: setup_repositories
+# Description: Enables necessary third-party repositories like Copr and RPM Fusion.
+# ------------------------------------------------------------------------------
+setup_repositories() {
+    echo "Configuring repositories..."
+    dnf install -y dnf-plugins-core
+    # Enable Copr repository for Ghostty terminal
+    dnf copr enable -y scottames/ghostty
+    # Enable RPM Fusion for proprietary Nvidia drivers and multimedia codecs
+    dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+                   https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    dnf update -y
+}
 
-## Basic setup
-initpackages=(
-	"gcc" "g++" "git" "curl" "wget" "lightdm" "awesome" "vim" "emacs"
-)
+# ------------------------------------------------------------------------------
+# Function: install_base_tools
+# Description: Installs standard CLI tools and system utilities.
+# ------------------------------------------------------------------------------
+install_base_tools() {
+    echo "Installing base CLI tools..."
+    local initpackages=(
+        "gcc" "gcc-c++" "git" "curl" "wget" "vim" "emacs" "eza" "zsh" "neofetch" 
+        "ansiweather" "pwgen" "gdb"
+    )
 
+    for p in "${initpackages[@]}"; do
+        dnf install -y "$p"
+    done
+}
 
-for p in ${initpackages[@]};
-do
-	REQUIRED_PKG=$p
-	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
-	echo Checking for $REQUIRED_PKG: $PKG_OK
-	if [ "" = "$PKG_OK" ]; then
-	  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-	  sudo dnf --yes install $REQUIRED_PKG
-	fi
-done
-## now a better shell
-sudo dnf install zsh --yes
-chsh -s $(which zsh)
-sudo chsh -s $(which zsh)
+# ------------------------------------------------------------------------------
+# Function: configure_zsh_and_configs
+# Description: Sets Zsh as the default shell and moves dotfiles into ~/.config
+# ------------------------------------------------------------------------------
+configure_zsh_and_configs() {
+    echo "Configuring Zsh and migrating configuration directories..."
+    # Change shell for both root and the standard user
+    chsh -s $(which zsh)
+    sudo -u $SUDO_USER chsh -s $(which zsh)
 
+    # Copy the customized .zshrc from the repo to the user's home directory
+    local conf="/home/$SUDO_USER/.zshrc"
+    rm -f "$conf"
+    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+    cp "$SCRIPT_DIR/.zshrc" "$conf"
+    chown $SUDO_USER:$SUDO_USER "$conf"
 
-#more fun
-packages=(
-	"konsole" "rufi" "librewolf"
-	"highlight" "exa" "neofetch"
-	"arandr" "fontawesome-fonts" "fontawesome-fonts-web"
-)
+    # Migrate all specified application config folders into ~/.config
+    local CONFIG_DIR="/home/$SUDO_USER/.config"
+    mkdir -p "$CONFIG_DIR"
 
+    echo "Copying config directories to $CONFIG_DIR..."
+    cp -r "$SCRIPT_DIR/alacritty" "$CONFIG_DIR/"
+    cp -r "$SCRIPT_DIR/emacsCppHero" "$CONFIG_DIR/"
+    cp -r "$SCRIPT_DIR/ghostty" "$CONFIG_DIR/"
+    cp -r "$SCRIPT_DIR/niri" "$CONFIG_DIR/"
+    cp -r "$SCRIPT_DIR/noctalia" "$CONFIG_DIR/"
+    cp -r "$SCRIPT_DIR/vicinae" "$CONFIG_DIR/"
+    cp -r "$SCRIPT_DIR/zsh_custom_public" "$CONFIG_DIR/.zsh_custom"
 
-for p in ${packages[@]};
-do
-	REQUIRED_PKG=$p
-	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
-	echo Checking for $REQUIRED_PKG: $PKG_OK
-	if [ "" = "$PKG_OK" ]; then
-	  echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-	  sudo dnf --yes install $REQUIRED_PKG
-	fi
-done
+    # Ensure the standard user owns their configuration files
+    chown -R $SUDO_USER:$SUDO_USER "$CONFIG_DIR"
+}
 
-## setup .zshrc (basic no seperate alias file
-conf="$HOME/.zshrc"
-sudo rm -f $conf
+# ------------------------------------------------------------------------------
+# Main Execution Block
+# ------------------------------------------------------------------------------
+echo "Starting Fedora Setup..."
+optimize_dnf
+setup_repositories
+install_base_tools
+configure_zsh_and_configs
 
-cat << EOF > $conf
-source $HOME/.screenlayout/MainScreenLayout.sh
-export ZSH="$HOME/.oh-my-zsh"
-# theme
-ZSH_THEME="amuse"
-#plugins_basic
-plugins(
-	git
-	colored-man-pages
-	perms
-	history
-	aliases
-)
-source $ZSH/oh-my-zsh.sh
-export PATH="~/bin:$PATH"
-export PATH="$HOME/.emacs.d/bin:$PATH"
+echo "Delegating to application and development tool scripts..."
+chmod +x install_desktop_and_apps.sh install_dev_tools.sh
 
-#simple aliases
-alias ll='exa -lhga --color=always --group-directories-first --icons --octal-permissions --git --time-style=long-iso'
-alias la='ls -A'
-alias l='ls -CF'
-alias llt='exa -lhg --color=always --group-directories-first --icons -T --git-ignore'
-##adding color
-alias ls='ls -hN --color=auto --group-directories-first'
-## See open ##listening## ports
-alias oplisten='netstat -tulpn | grep LISTEN' 
+# Run desktop apps installation as root
+./install_desktop_and_apps.sh
 
+# Run dev tools installation as the standard user
+sudo -u $SUDO_USER ./install_dev_tools.sh
 
-alias grep='grep --color=auto'
-alias ccat='highlight --out-format=ansi'
-
-alias emacs="emacsclient -c -a 'emacs'"
-
-
-
-neofetch
-EOF
-
-##setup graphics for WM/DM
-sudo systemctl enable lightdm
-sudo systemctl set-default graphical.target
-
-
-
-
+echo "Setup complete. Please reboot your machine."

@@ -1,0 +1,19 @@
+elixir via that elixir version manager at latest
+    and all elixir-ls and etc.
+Source Package dotnet10.0
+clangd
+fd
+ripgrep
+ghostty
+alacrity 
+ttt - editor
+bash lsp
+nodejs via nvm - latest LTS
+KDE plasma - (fallback) from niri
+vicinae
+keymapp (zsa keyboard app)
+librewolf
+vscodium
+full sound etc
+nvidia - cuda drivers , proprietary version 
+docker
