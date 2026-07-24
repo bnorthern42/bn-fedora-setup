@@ -84,7 +84,7 @@ configure_zsh_and_configs() {
     cp -r "$SCRIPT_DIR/alacritty" "$CONFIG_DIR/"
     
     # Emacs config should be placed in ~/.emacs.d
-    cp -r "$SCRIPT_DIR/emacsCppHero" "/home/$SUDO_USER/.emacs.d"
+    cp -r "$SCRIPT_DIR/.emacs.d" "/home/$SUDO_USER/"
     
     cp -r "$SCRIPT_DIR/ghostty" "$CONFIG_DIR/"
     cp -r "$SCRIPT_DIR/niri" "$CONFIG_DIR/"
