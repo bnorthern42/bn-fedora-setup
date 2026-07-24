@@ -82,7 +82,10 @@ configure_zsh_and_configs() {
 
     echo "Copying config directories to $CONFIG_DIR..."
     cp -r "$SCRIPT_DIR/alacritty" "$CONFIG_DIR/"
-    cp -r "$SCRIPT_DIR/emacsCppHero" "$CONFIG_DIR/"
+    
+    # Emacs config should be placed in ~/.emacs.d
+    cp -r "$SCRIPT_DIR/emacsCppHero" "/home/$SUDO_USER/.emacs.d"
+    
     cp -r "$SCRIPT_DIR/ghostty" "$CONFIG_DIR/"
     cp -r "$SCRIPT_DIR/niri" "$CONFIG_DIR/"
     cp -r "$SCRIPT_DIR/noctalia" "$CONFIG_DIR/"
@@ -91,6 +94,7 @@ configure_zsh_and_configs() {
 
     # Ensure the standard user owns their configuration files
     chown -R $SUDO_USER:$SUDO_USER "$CONFIG_DIR"
+    chown -R $SUDO_USER:$SUDO_USER "/home/$SUDO_USER/.emacs.d"
 }
 
 # ------------------------------------------------------------------------------
