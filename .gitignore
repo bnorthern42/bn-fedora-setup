@@ -4,11 +4,11 @@
 eln-cache/
 .emacs.desktop
 .emacs.desktop.lock
-.emacs.d/auto-save-list/
-.emacs.d/elpa/
-.emacs.d/straight/
-.emacs.d/server/
-.emacs.d/tramp
+emacsCppHero/auto-save-list/
+emacsCppHero/elpa/
+emacsCppHero/straight/
+emacsCppHero/server/
+emacsCppHero/tramp
 auto-save-list/
 semanticdb/
 session/
